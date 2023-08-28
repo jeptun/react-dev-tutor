@@ -1,38 +1,47 @@
-import { useState } from "react";
+import { useState } from 'react';
+import { foods, filterItems } from './data.js';
+
 
 export default function App() {
-  const [text, setText] = useState("txt");
-
+  const [query, setQuery] = useState('test');
   function handleChange(e) {
-    setText(e.target.value);
-  }
-  function handleShow() {
-    setText("show");
-  }
+    setQuery(e.target.value);
 
+    console.log('query: ', query);
+  }
   return (
-    <div>
-      <Input
-        label="First input"
-        textValue={text}
-        onChange={handleChange}
-        onShowChange={handleShow}
-      />
-      <Input
-        label="Second input"
-        textValue={text}
-        onChange={handleChange}
-        onShowChange={handleShow}
-      />
-    </div>
+    <>
+      <SearchBar _value={query} _onChange={handleChange}/>
+      <hr />
+      <List items={filterItems(foods,query)} />
+    </>
   );
 }
 
-function Input({ label, textValue, onChange, onShowChange }) {
+function SearchBar({_value, _onChange}) {
+
   return (
     <label>
-      {label}
-      <input value={textValue} onChange={onChange} onClick={onShowChange} />
+      Search:{' '}
+      <input
+        value={_value}
+        onChange={_onChange}
+      />
     </label>
+  );
+}
+
+function List({ items }) {
+  return (
+    <table>
+      <tbody>
+        {items.map(food => (
+          <tr key={food.id}>
+            <td>{food.name}</td>
+            <td>{food.description}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
